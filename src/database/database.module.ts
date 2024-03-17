@@ -7,7 +7,7 @@ dotenv.config();
 
 @Module({
     imports: [
-        MongooseModule.forRoot(`${process.env.DB_PROTOCOL}://${process.env.DB_URI}`,{
+      MongooseModule.forRoot(`${process.env.DB_PROTOCOL}://${process.env.DB_URI}`,{
             dbName: process.env.DB_NAME,
             user: process.env.DB_USER,
             pass: process.env.DB_PASS,
