@@ -17,7 +17,7 @@ export class UserService {
   }
 
   async exists(email_id: string): Promise<User> {
-    return this.userModel.findOne({ identification: email_id , email:email_id }).exec();
+    return this.userModel.findOne({ email:email_id }).exec();
   }
 
   async create(user: User): Promise<User> {
