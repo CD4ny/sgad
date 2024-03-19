@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User } from './user.schema';
+import { User, UserDocument } from './user.schema';
 
 @Injectable()
 export class UserService {
@@ -12,15 +12,15 @@ export class UserService {
     return this.userModel.find().exec();
   }
 
-  async findOne(id: number): Promise<User> {
+  async findOne(id: number): Promise<UserDocument> {
     return this.userModel.findById(id).exec();
   }
 
-  async exists(email_id: string): Promise<User> {
+  async exists(email_id: string): Promise<UserDocument> {
     return this.userModel.findOne({ email:email_id }).exec();
   }
 
-  async create(user: User): Promise<User> {
+  async create(user: User): Promise<UserDocument> {
     const newUser = new this.userModel(user);
     await this.validateUser(user);
     return newUser.save();
