@@ -7,6 +7,7 @@ import { json, urlencoded } from 'express';
 import { SwaggerTheme, SwaggerThemeNameEnum } from 'swagger-themes';
 // @ts-ignore
 import { ValidationPipe, BadRequestException } from '@nestjs/common';
+import session from 'express-session';
 
 
 async function bootstrap() {
@@ -15,6 +16,7 @@ async function bootstrap() {
   app.use(json({ limit: '50mb' }));
   app.use(urlencoded({ extended: true, limit: '50mb' }));
   app.enableCors();
+
   const apiPath: string = 'api';
   app.setGlobalPrefix(apiPath);
   if (process.env.ENV !== 'production') {
