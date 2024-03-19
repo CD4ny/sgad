@@ -1,13 +1,13 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { IsString, IsEmail, IsBoolean, IsNumberString } from 'class-validator';
+import { IsString, IsEmail, IsBoolean, IsNumberString, Length } from 'class-validator';
 import * as bcrypt from 'bcrypt';
 import {ApiProperty} from "@nestjs/swagger";
 
 @Schema({ validateBeforeSave: true })
 export class User {
 
-    @ApiProperty()
+    @ApiProperty({ description: 'The name of the user' })
     @IsEmail()
     @Prop({ required: true, unique: true })
     email: string;
@@ -20,10 +20,11 @@ export class User {
     @ApiProperty()
     @IsString()
     @Prop({ required: true })
-    surname: string;
+    lastname: string;
 
-    @ApiProperty()
     @IsNumberString()
+    @Length(11, 11, { message: 'Your field must be exactly 11 digits long' })
+    yourField: string;
     @Prop({ required: true, unique: true })
     identification: string;
 
@@ -37,21 +38,10 @@ export class User {
     @Prop({ required: true })
     password: string;
 
-    @ApiProperty()
-    @IsString()
-    @Prop({ required: true })
-    passwordConfirmation: string;
-
-    @Prop({ required: false })
-    _passwordConfirmation: string;
 
     async comparePassword(candidatePassword: string): Promise<boolean> {
         return bcrypt.compare(candidatePassword, this.password);
     }
 }
 
-export type UserDocument = User & Document;
-
-// Define the schema outside the class
 export const UserSchema = SchemaFactory.createForClass(User);
-
