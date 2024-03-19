@@ -22,4 +22,8 @@ export class AuthService {
       access_token: await this.jwtService.signAsync(payload),
     };
   }
+
+  refreshToken(refreshToken: string) {
+    return Promise.resolve(undefined);
+  }
 }

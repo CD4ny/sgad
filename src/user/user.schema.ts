@@ -22,9 +22,9 @@ export class User {
     @Prop({ required: true })
     lastname: string;
 
+    @ApiProperty()
     @IsNumberString()
     @Length(11, 11, { message: 'Your field must be exactly 11 digits long' })
-    yourField: string;
     @Prop({ required: true, unique: true })
     identification: string;
 

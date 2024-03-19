@@ -2,13 +2,11 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 // @ts-ignore
 import { SwaggerModule, DocumentBuilder, SwaggerCustomOptions } from '@nestjs/swagger';
-import * as dotenv from 'dotenv';
+import 'dotenv/config';
 import { json, urlencoded } from 'express';
 import { SwaggerTheme, SwaggerThemeNameEnum } from 'swagger-themes';
 // @ts-ignore
 import { ValidationPipe, BadRequestException } from '@nestjs/common';
-
-dotenv.config();
 
 
 async function bootstrap() {
@@ -16,6 +14,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(json({ limit: '50mb' }));
   app.use(urlencoded({ extended: true, limit: '50mb' }));
+  app.enableCors();
   const apiPath: string = 'api';
   app.setGlobalPrefix(apiPath);
   if (process.env.ENV !== 'production') {
@@ -59,7 +58,7 @@ async function bootstrap() {
   );
 
 
-  await app.listen(3000);
+  await app.listen(process.env.PORT || 5000);
 }
 
 bootstrap().then(r => console.log(r));
