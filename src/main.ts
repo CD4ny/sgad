@@ -19,7 +19,7 @@ async function bootstrap() {
 
   const apiPath: string = 'api';
   app.setGlobalPrefix(apiPath);
-  if (process.env.ENV !== 'production') {
+  if (process.env.SWAGGER !== 'false') {
     const options = new DocumentBuilder()
       .setTitle('SGAD')
       .setDescription('')
