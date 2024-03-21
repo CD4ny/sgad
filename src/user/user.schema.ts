@@ -20,13 +20,13 @@ export class User {
 
     @ApiProperty()
     @IsString()
-    @Prop({ required: true })
+    @Prop({ default: "000000000000"})
     lastname: string;
 
     @ApiProperty()
     @IsNumberString()
     @Length(11, 11, { message: 'Your field must be exactly 11 digits long' })
-    @Prop({ required: true, unique: true })
+    @Prop({  default: "000000000000"})
     identification: string;
 
     @ApiProperty()
@@ -39,10 +39,11 @@ export class User {
     @Prop({ required: true })
     password: string;
 
+    @ApiProperty()
+    @IsString()
+    @Prop()
+    confirmToken: string;
 
-    async comparePassword(candidatePassword: string): Promise<boolean> {
-        return bcrypt.compare(candidatePassword, this.password);
-    }
 }
 export type UserDocument = HydratedDocument<User> & Document;
 export const UserSchema = SchemaFactory.createForClass(User);

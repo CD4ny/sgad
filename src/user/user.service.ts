@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from './user.schema';
@@ -12,7 +12,7 @@ export class UserService {
     return this.userModel.find().exec();
   }
 
-  async findOne(id: number): Promise<UserDocument> {
+  async findOne(id: string): Promise<UserDocument> {
     return this.userModel.findById(id).exec();
   }
 
@@ -42,18 +42,13 @@ export class UserService {
   async validateUser(user: User): Promise<void> {
     let errorMessage: string = '';
 
-    const identification =
-      await this.userModel.exists({ identification: user.identification }).exec().then();
     const email =
       await this.userModel.exists({ email: user.email }).exec();
 
-    if (identification != null || email != null) {
-      if (process.env.NODE_ENV !== 'production') {
-        errorMessage = 'found conflict in' + identification + 'and ' + email;
-      } else {
-        errorMessage = 'Conflict';
-      }
-      throw new BadRequestException(409, errorMessage);
+    if (email != null) {
+      errorMessage = 'Conflict';
+
+      throw new HttpException("El usuario ya existe",400);
     }
   }
 

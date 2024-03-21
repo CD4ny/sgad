@@ -1,14 +1,17 @@
-import { Body, Controller, Post, HttpCode, HttpStatus } from '@nestjs/common';
+import { Body, Controller, Post, HttpCode, HttpStatus, Get, UseGuards, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { SignInDto } from './dto/SignInDto';
-import { SignUpDto } from './dto/SignUpDto';
+import { SignInDto } from './dto/SignIn.dto';
+import { SignUpDto } from './dto/SignUp.dto';
+import { JwtService } from '@nestjs/jwt';
+import { AuthGuard } from './auth.guard';
 
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private jwtService: JwtService) {
+  }
 
   @ApiOperation({ summary: 'Autenticar' })
   @ApiBody({ type: SignInDto })
@@ -17,19 +20,22 @@ export class AuthController {
   signIn(@Body() signInDto: SignInDto) {
     return this.authService.signIn(signInDto.email, signInDto.password);
   }
+
   @ApiOperation({ summary: 'Registrar' })
   @ApiBody({ type: SignUpDto })
   @HttpCode(HttpStatus.OK)
-  @Post('signup')
+  @Post('register')
   signUp(@Body() signInDto: SignInDto) {
-    return this.authService.signIn(signInDto.email, signInDto.password);
+    return this.authService.signUp(signInDto.email, signInDto.password);
   }
 
   @ApiOperation({ summary: 'Registrar' })
   @ApiBody({})
+  @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.OK)
-  @Post('refresh')
-  async refresh(@Body('refreshToken') refreshToken: string) {
-    return this.authService.refreshToken(refreshToken);
+  @Get('info-user')
+  async isUserLogged(@Req() request) {
+    const token = request.headers.authorization.split(' ')[1];
+    return this.authService.isUserLogged(token);
   }
 }

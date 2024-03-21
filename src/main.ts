@@ -16,7 +16,6 @@ async function bootstrap() {
   app.use(json({ limit: '50mb' }));
   app.use(urlencoded({ extended: true, limit: '50mb' }));
   app.enableCors();
-
   const apiPath: string = 'api';
   app.setGlobalPrefix(apiPath);
   if (process.env.SWAGGER !== 'false') {
@@ -33,7 +32,7 @@ async function bootstrap() {
           description: 'Enter JWT token',
           in: 'header',
         },
-        'JWT-auth', // This name is important for matching with @ApiBearerAuth() in your controller
+        'JWT-auth', // This name is important for matching with @ApiBearerAuth() in your controllera
       )
       .build();
 
@@ -44,7 +43,7 @@ async function bootstrap() {
       swaggerOptions: {
         jsonEditor: true,
       },
-      customCss: theme.getBuffer(SwaggerThemeNameEnum.DARK)
+      customCss: theme.getBuffer(SwaggerThemeNameEnum.DARK),
     };
     const document = SwaggerModule.createDocument(app, options);
     SwaggerModule.setup('api/docs', app, document, customOptions);
@@ -63,4 +62,4 @@ async function bootstrap() {
   await app.listen(process.env.PORT || 5000);
 }
 
-bootstrap().then(r => console.log("Listening a:"+(process.env.PORT || 5000)));
+bootstrap().then(r => console.log('Listening port:' + (process.env.PORT || 5000)));
