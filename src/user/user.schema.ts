@@ -1,10 +1,10 @@
-import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, HydratedDocument } from 'mongoose';
 import {
-  IsString,
-  IsEmail,
   IsBoolean,
+  IsEmail,
   IsNumberString,
+  IsString,
   Length,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
@@ -35,7 +35,12 @@ export class User {
   @ApiProperty()
   @IsBoolean()
   @Prop({ required: true, default: false })
-  isActive: boolean;
+  active: boolean;
+
+  @ApiProperty()
+  @IsBoolean()
+  @Prop({ required: true, default: false })
+  confirmed: boolean;
 
   @ApiProperty()
   @IsString()

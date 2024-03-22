@@ -137,7 +137,8 @@ export class AuthService {
       email: email,
       password: pass,
       name: name,
-      isActive: false,
+      confirmed: false,
+      active: true,
     });
 
     const nodemailerOptions: SMTPTransport.Options = {
@@ -219,7 +220,7 @@ export class AuthService {
       throw new HttpException('Usuario no existe', HttpStatus.NOT_FOUND);
     }
 
-    if (!user?.isActive) {
+    if (!user?.confirmed) {
       throw new HttpException('Cuenta sin confirmar', HttpStatus.FORBIDDEN);
     }
 

@@ -12,16 +12,12 @@ import { AuthService } from './auth.service';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { SignInDto } from './dto/SignInDto';
 import { SignUpDto } from './dto/SignUpDto';
-import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from './auth.guard';
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private authService: AuthService,
-    private jwtService: JwtService,
-  ) {}
+  constructor(private authService: AuthService) {}
 
   @ApiOperation({ summary: 'Autenticar' })
   @ApiBody({ type: SignInDto })
