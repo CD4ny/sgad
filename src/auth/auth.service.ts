@@ -256,4 +256,8 @@ export class AuthService {
       lastname: user.lastname,
     };
   }
+
+  checkActivationCode() {
+    return Promise.resolve(undefined);
+  }
 }

@@ -1,17 +1,27 @@
-import { Body, Controller, Post, HttpCode, HttpStatus, Get, UseGuards, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { SignInDto } from './dto/SignIn.dto';
-import { SignUpDto } from './dto/SignUp.dto';
+import { SignInDto } from './dto/SignInDto';
+import { SignUpDto } from './dto/SignUpDto';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from './auth.guard';
-
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService, private jwtService: JwtService) {
-  }
+  constructor(
+    private authService: AuthService,
+    private jwtService: JwtService,
+  ) {}
 
   @ApiOperation({ summary: 'Autenticar' })
   @ApiBody({ type: SignInDto })
@@ -37,5 +47,13 @@ export class AuthController {
   async isUserLogged(@Req() request) {
     const token = request.headers.authorization.split(' ')[1];
     return this.authService.isUserLogged(token);
+  }
+
+  @ApiOperation({ summary: 'Registrar' })
+  @ApiBody({})
+  @HttpCode(HttpStatus.OK)
+  @Post('validar')
+  async checkActivationCode() {
+    return this.authService.checkActivationCode();
   }
 }
