@@ -10,11 +10,8 @@ import { UserDocument } from '../user/user.schema';
 import * as nodemailer from 'nodemailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import { jwtConstants } from './auth.constants';
-// import * as dotenv from 'dotenv';
-//
-// dotenv.config();
-
-// import bcryptjs from "bcryptjs";
+import { AuthGuard } from './auth.guard';
+import { Request } from 'express';
 
 async function generateEmailConfirmPage(url: string) {
   return `<!DOCTYPE html>
@@ -119,6 +116,7 @@ export class AuthService {
   constructor(
     private usersService: UserService,
     private jwtService: JwtService,
+    private authGuard: AuthGuard,
   ) {}
 
   async signUp(email: string, pass: string): Promise<{ message: string }> {
@@ -174,9 +172,7 @@ export class AuthService {
   }
 
   /*
-   *   TODO
-   *
-   *
+   *   TODO: hacer unlogin
    * */
   async signOut(
     username: string,
@@ -238,19 +234,22 @@ export class AuthService {
     };
   }
 
-  async isUserLogged(token: string): Promise<{
+  async isUserLogged(req: Request): Promise<{
     name: string;
     id: any;
     email: string;
     accessToken: string;
     lastname: string;
   }> {
+    let token = this.authGuard.extractTokenFromHeader(req);
+    console.log(token);
     let payload = this.jwtService.decode(token);
+    console.log(payload, req, token);
     const id = payload.id;
     const user: UserDocument = await this.usersService.findOne(id);
-    let payload2 = { id: user.id, email: user.email };
+    payload = { id: user.id, email: user.email };
     return {
-      accessToken: this.jwtService.sign(payload2),
+      accessToken: this.jwtService.sign(payload),
       id: user.id,
       email: user.email,
       name: user.name,
@@ -258,6 +257,9 @@ export class AuthService {
     };
   }
 
+  /*
+   * TODO hacer logica de metodo de activacion de cuenta
+   * */
   checkActivationCode() {
     return Promise.resolve(undefined);
   }

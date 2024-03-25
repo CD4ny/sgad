@@ -9,10 +9,11 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { SignInDto } from './dto/SignInDto';
 import { SignUpDto } from './dto/SignUpDto';
 import { AuthGuard } from './auth.guard';
+import { Request } from 'express';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -35,21 +36,12 @@ export class AuthController {
     return this.authService.signUp(signInDto.email, signInDto.password);
   }
 
-  @ApiOperation({ summary: 'Registrar' })
-  @ApiBody({})
+  @ApiOperation({ summary: 'UserInfo' })
+  @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.OK)
   @Get('info-user')
-  async isUserLogged(@Req() request) {
-    const token = request.headers.authorization.split(' ')[1];
-    return this.authService.isUserLogged(token);
-  }
-
-  @ApiOperation({ summary: 'Registrar' })
-  @ApiBody({})
-  @HttpCode(HttpStatus.OK)
-  @Post('validar')
-  async checkActivationCode() {
-    return this.authService.checkActivationCode();
+  async isUserLogged(@Req() request: Request) {
+    return this.authService.isUserLogged(request);
   }
 }

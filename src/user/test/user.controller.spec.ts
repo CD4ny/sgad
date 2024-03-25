@@ -33,20 +33,14 @@ describe('UserController (e2e)', () => {
     const users = [{ id: 1, name: 'John Doe' }];
     userService.findAll.mockResolvedValue(users);
 
-    return request(app.getHttpServer())
-      .get('/user')
-      .expect(200)
-      .expect(users);
+    return request(app.getHttpServer()).get('/user').expect(200).expect(users);
   });
 
   it('/user/:id (GET)', () => {
     const user = { id: 1, name: 'John Doe' };
     userService.findOne.mockResolvedValue(user);
 
-    return request(app.getHttpServer())
-      .get('/user/1')
-      .expect(200)
-      .expect(user);
+    return request(app.getHttpServer()).get('/user/1').expect(200).expect(user);
   });
 
   it('/user (POST)', () => {

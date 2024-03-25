@@ -4,10 +4,26 @@ import { UserModule } from './user/user.module';
 import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
 import { FormModule } from './form/form.module';
-@Module({
 
-  imports: [AuthModule, UserModule, DatabaseModule ,ConfigModule.forRoot({
-    isGlobal: true,
-  }), FormModule,]
+@Module({
+  imports: [
+    AuthModule,
+    UserModule,
+    DatabaseModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    FormModule,
+    // LoggerModule.forRoot({
+    //   pinoHttp: {
+    //     transport: {
+    //       target: 'pino-pretty',
+    //       options: {
+    //         singleLine: true,
+    //       },
+    //     },
+    //   },
+    // }),
+  ],
 })
 export class AppModule {}

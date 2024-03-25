@@ -20,5 +20,5 @@ export class Form {
   fields: Types.ObjectId[];
 }
 
-export type UserDocument = HydratedDocument<Form> & Document;
-export const UserSchema = SchemaFactory.createForClass(Form);
+export type FormDocument = HydratedDocument<Form> & Document;
+export const FormSchema = SchemaFactory.createForClass(Form);

@@ -1,36 +1,53 @@
-import { Controller, Post, Body, Get, Param, Delete, Put, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './user.schema';
-import { ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '../auth/auth.guard';
 
 @ApiTags('User')
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {
-  }
-  @UseGuards(AuthGuard('jwt'))
+  constructor(private readonly userService: UserService) {}
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Get()
   findAll(): Promise<User[]> {
     return this.userService.findAll();
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string): Promise<User> {
     return this.userService.findOne(id);
   }
-  @UseGuards(AuthGuard('jwt'))
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Post()
   create(@Body() user: User): Promise<User> {
     return this.userService.create(user);
   }
-  @UseGuards(AuthGuard('jwt'))
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Put(':id')
   update(@Param('id') id: number, @Body() user: User): Promise<User> {
     return this.userService.update(id, user);
   }
-  @UseGuards(AuthGuard('jwt'))
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Delete(':id')
   remove(@Param('id') id: number): Promise<User> {
     return this.userService.remove(id);

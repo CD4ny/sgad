@@ -1,18 +1,20 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-// @ts-ignore
-import { SwaggerModule, DocumentBuilder, SwaggerCustomOptions } from '@nestjs/swagger';
+import {
+  DocumentBuilder,
+  SwaggerCustomOptions,
+  SwaggerModule,
+} from '@nestjs/swagger';
 import 'dotenv/config';
 import { json, urlencoded } from 'express';
 import { SwaggerTheme, SwaggerThemeNameEnum } from 'swagger-themes';
-// @ts-ignore
-import { ValidationPipe, BadRequestException } from '@nestjs/common';
-import session from 'express-session';
+import { BadRequestException, ValidationPipe } from '@nestjs/common';
 
+// import { Logger } from 'nestjs-pino';
 
 async function bootstrap() {
-
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { bufferLogs: true });
+  // app.useLogger(app.get(Logger));
   app.use(json({ limit: '50mb' }));
   app.use(urlencoded({ extended: true, limit: '50mb' }));
   app.enableCors();
@@ -20,22 +22,11 @@ async function bootstrap() {
   app.setGlobalPrefix(apiPath);
   if (process.env.SWAGGER !== 'false') {
     const options = new DocumentBuilder()
+      .addBearerAuth()
       .setTitle('SGAD')
       .setDescription('')
       .setVersion('1.0')
-      .addBearerAuth(
-        {
-          type: 'http',
-          scheme: 'bearer',
-          bearerFormat: 'JWT',
-          name: 'JWT',
-          description: 'Enter JWT token',
-          in: 'header',
-        },
-        'JWT-auth', // This name is important for matching with @ApiBearerAuth() in your controllera
-      )
       .build();
-
 
     const theme = new SwaggerTheme();
     const customOptions: SwaggerCustomOptions = {
@@ -58,8 +49,9 @@ async function bootstrap() {
     }),
   );
 
-
   await app.listen(process.env.PORT || 5000);
 }
 
-bootstrap().then(r => console.log('Listening port:' + (process.env.PORT || 5000)));
+bootstrap().then((r) =>
+  console.log('Listening port:' + (process.env.PORT || 5000)),
+);
