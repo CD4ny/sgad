@@ -115,10 +115,12 @@ export class FormService {
       .exec();
   }
 
+  // TODO delete fields
   async remove(id: string): Promise<Form> {
     return this.formModel.findByIdAndDelete(id).exec();
   }
 
+  // TODO delete fields
   async removeBulk(forms: string[]): Promise<DeleteResult> {
     const objectIds = forms.map((form) => new Types.ObjectId(form));
     return this.formModel.deleteMany({ _id: { $in: objectIds } }).exec();

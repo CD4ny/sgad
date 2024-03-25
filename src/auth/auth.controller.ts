@@ -30,7 +30,7 @@ export class AuthController {
 
   @ApiOperation({ summary: 'Registrar' })
   @ApiBody({ type: SignUpDto })
-  @HttpCode(HttpStatus.OK)
+  @HttpCode(HttpStatus.CREATED)
   @Post('register')
   signUp(@Body() signInDto: SignInDto) {
     return this.authService.signUp(signInDto.email, signInDto.password);

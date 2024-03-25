@@ -47,7 +47,7 @@ export class FormController {
 
   @ApiBearerAuth()
   @Delete()
-  remove_bulk(@Body() params: { forms: string[] }) {
-    return this.formService.removeBulk(params.forms);
+  remove_bulk(@Body() params: { ids: string[] }) {
+    return this.formService.removeBulk(params.ids);
   }
 }

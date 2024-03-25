@@ -130,7 +130,6 @@ export class AuthService {
 
     user = await this.usersService.create({
       confirmToken: Date.now() + name,
-      identification: '',
       lastname: '',
       email: email,
       password: pass,
@@ -189,7 +188,7 @@ export class AuthService {
     if (user?.password != pass) {
       throw new UnauthorizedException();
     }
-    const payload = { sub: user.identification, username: user.email };
+    const payload = { sub: user.email, username: user.name };
     return {
       accessToken: await this.jwtService.signAsync(payload),
       id: user.id,
@@ -247,7 +246,7 @@ export class AuthService {
     console.log(payload, req, token);
     const id = payload.id;
     const user: UserDocument = await this.usersService.findOne(id);
-    payload = { id: user.id, email: user.email };
+    payload = { id: user?.id, email: user?.email };
     return {
       accessToken: this.jwtService.sign(payload),
       id: user.id,

@@ -1,12 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, HydratedDocument } from 'mongoose';
-import {
-  IsBoolean,
-  IsEmail,
-  IsNumberString,
-  IsString,
-  Length,
-} from 'class-validator';
+import { IsBoolean, IsEmail, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Schema({ validateBeforeSave: true })
@@ -23,14 +17,8 @@ export class User {
 
   @ApiProperty()
   @IsString()
-  @Prop({ default: '000000000000' })
+  @Prop({ default: '000000000000', unique: false })
   lastname: string;
-
-  @ApiProperty()
-  @IsNumberString()
-  @Length(11, 11, { message: 'Your field must be exactly 11 digits long' })
-  @Prop({ default: '000000000000' })
-  identification: string;
 
   @ApiProperty()
   @IsBoolean()
