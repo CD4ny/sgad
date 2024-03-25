@@ -4,6 +4,7 @@ import { UserModule } from './user/user.module';
 import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
 import { FormModule } from './form/form.module';
+import { AthleteModule } from './athlete/athlete.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { FormModule } from './form/form.module';
       isGlobal: true,
     }),
     FormModule,
+    AthleteModule,
     // LoggerModule.forRoot({
     //   pinoHttp: {
     //     transport: {

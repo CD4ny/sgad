@@ -7,25 +7,32 @@ import {
   IsString,
 } from 'class-validator';
 import { PartialType } from '@nestjs/mapped-types';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateFieldDto {
+  @ApiProperty()
   @IsString()
   name: string;
 
+  @ApiProperty()
   @IsString()
   type: string;
 
+  @ApiProperty()
   @IsBoolean()
   required: boolean;
 
+  @ApiProperty()
   @IsOptional()
   @IsString()
   desc?: string;
 
+  @ApiProperty()
   @IsOptional()
   @IsNumber()
   optimalValue?: number;
 
+  @ApiProperty()
   @IsOptional()
   @IsArray()
   @ArrayUnique()

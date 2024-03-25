@@ -1,8 +1,9 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiExtraModels, ApiHideProperty } from '@nestjs/swagger';
 
+@ApiExtraModels()
 export class SignUpDto {
-  @ApiProperty()
+  @ApiHideProperty()
   readonly email: string;
-  @ApiProperty()
+  @ApiHideProperty()
   readonly password: string;
 }

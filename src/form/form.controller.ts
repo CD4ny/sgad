@@ -9,8 +9,9 @@ import {
 } from '@nestjs/common';
 import { FormService } from './form.service';
 import { CreateFormDto, UpdateFormDto } from './dto/form.dto';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Form')
 @Controller('form')
 export class FormController {
   constructor(private readonly formService: FormService) {}
