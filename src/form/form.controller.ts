@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { FormService } from './form.service';
 import { CreateFormDto, UpdateFormDto } from './dto/form.dto';
@@ -17,14 +18,20 @@ export class FormController {
   constructor(private readonly formService: FormService) {}
 
   @ApiBearerAuth('token')
-  @Post()
+  @Post('create')
   create(@Body() createFormDto: CreateFormDto) {
     return this.formService.create(createFormDto);
   }
 
   @ApiBearerAuth()
   @Get()
-  findAll(@Body() params: { ids?: string[]; extended?: boolean }) {
+  findAll(@Query('extended') extended?: boolean) {
+    return this.formService.findAll(null, extended);
+  }
+
+  @ApiBearerAuth()
+  @Post()
+  findAllPost(@Body() params: { ids?: string[]; extended?: boolean }) {
     return this.formService.findAll(params.ids, params.extended);
   }
 
