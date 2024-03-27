@@ -63,7 +63,7 @@ export class FormService {
   }
 
   async findAll(ids?: string[], extended?: boolean): Promise<CreateFormDto[]> {
-    const objectIds = ids.map((form) => new Types.ObjectId(form));
+    const objectIds = ids?.map((form) => new Types.ObjectId(form));
 
     let filter = null;
 
