@@ -46,6 +46,9 @@ export class FormService {
   async create(createFormDto: CreateFormDto): Promise<Form> {
     const { title, desc, fields } = createFormDto;
 
+    if (fields.length < 1)
+      throw new HttpException('Campos Vacíos', HttpStatus.BAD_REQUEST);
+
     const fieldInstances = await Promise.all(
       fields.map(async (fieldData) => {
         const field = new this.fieldModel(fieldData);
