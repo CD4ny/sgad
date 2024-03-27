@@ -24,8 +24,8 @@ export class FormController {
 
   @ApiBearerAuth()
   @Get()
-  findAll() {
-    return this.formService.findAll();
+  findAll(@Body() params: { ids?: string[]; extended?: boolean }) {
+    return this.formService.findAll(params.ids, params.extended);
   }
 
   @ApiBearerAuth()

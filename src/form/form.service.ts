@@ -62,28 +62,35 @@ export class FormService {
     return createdForm.save();
   }
 
-  async findAll(): Promise<CreateFormDto[]> {
-    let forms = await this.formModel.find().exec();
+  async findAll(ids?: string[], extended?: boolean): Promise<CreateFormDto[]> {
+    const objectIds = ids.map((form) => new Types.ObjectId(form));
 
-    let createFormDtos: CreateFormDto[] = [];
+    let filter = null;
 
-    for (const form of forms) {
-      let createFormDto: CreateFormDto = new CreateFormDto();
+    if (ids && ids.length > 0) filter = { _id: { $in: objectIds } };
 
-      createFormDto.title = form.title;
-      createFormDto.desc = form.desc;
-      createFormDto['id'] = form.id;
+    const forms = await this.formModel.find(filter).exec();
 
-      createFormDto.fields = [];
+    let createFormDtos: Awaited<CreateFormDto>[];
+    createFormDtos = await Promise.all(
+      forms.map(async (form) => {
+        let createFormDto: CreateFormDto = new CreateFormDto();
 
-      for (const fieldId of form.fields) {
-        let field = await this.fieldModel.findById(fieldId).exec();
+        createFormDto.title = form.title;
+        createFormDto.desc = form.desc;
+        createFormDto['id'] = form.id;
 
-        createFormDto.fields.push(field);
-      }
-      createFormDtos.push(createFormDto);
-    }
+        if (extended)
+          createFormDto.fields = await Promise.all(
+            form.fields.map((fieldId) =>
+              this.fieldModel.findById(fieldId).exec(),
+            ),
+          );
+        else createFormDto.fields = form.fields;
 
+        return createFormDto;
+      }),
+    );
     return createFormDtos;
   }
 
@@ -95,13 +102,9 @@ export class FormService {
     createFormDto.desc = form.desc;
     createFormDto['id'] = form.id;
 
-    createFormDto.fields = [];
-
-    for (const fieldId of form.fields) {
-      let field = await this.fieldModel.findById(id).exec();
-
-      createFormDto.fields.push(field);
-    }
+    createFormDto.fields = await Promise.all(
+      form.fields.map((fieldId) => this.fieldModel.findById(fieldId).exec()),
+    );
 
     return createFormDto;
   }

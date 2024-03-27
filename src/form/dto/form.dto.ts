@@ -3,6 +3,7 @@ import { PartialType } from '@nestjs/mapped-types';
 import { Type } from 'class-transformer';
 import { CreateFieldDto } from './field.dto';
 import { ApiProperty } from '@nestjs/swagger';
+import { Types } from 'mongoose';
 
 export class CreateFormDto {
   @ApiProperty()
@@ -18,7 +19,7 @@ export class CreateFormDto {
   @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => CreateFieldDto)
-  fields: CreateFieldDto[];
+  fields: CreateFieldDto[] | Types.ObjectId[];
 }
 
 export class UpdateFormDto extends PartialType(CreateFormDto, {
