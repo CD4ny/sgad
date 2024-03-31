@@ -1,7 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, HydratedDocument, Types } from 'mongoose';
-import { IsDate, IsNumberString, IsString, Length } from 'class-validator';
+import { Document, HydratedDocument } from 'mongoose';
+import { IsDate, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { FormDocument } from '../../form/schemas/form.schema';
 
 @Schema({ validateBeforeSave: true })
 export class Athlete {
@@ -16,12 +17,6 @@ export class Athlete {
   lastName: string;
 
   @ApiProperty()
-  @IsNumberString()
-  @Length(11, 11, { message: 'Your field must be exactly 11 digits long' })
-  @Prop()
-  ci: string;
-
-  @ApiProperty()
   @IsString()
   @Prop()
   country: string;
@@ -33,11 +28,7 @@ export class Athlete {
 
   @ApiProperty()
   @Prop()
-  measurements: Types.ObjectId[];
-
-  @ApiProperty()
-  @Prop()
-  forms: Types.ObjectId[];
+  misc: FormDocument[];
 }
 
 export type AthleteDocument = HydratedDocument<Athlete> & Document;
