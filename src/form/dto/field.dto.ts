@@ -37,6 +37,11 @@ export class CreateFieldDto {
   @IsArray()
   @ArrayUnique()
   options?: string[];
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  id?: string;
 }
 
 export class UpdateFieldDto extends PartialType(CreateFieldDto) {}

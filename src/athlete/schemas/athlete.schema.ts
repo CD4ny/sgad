@@ -9,7 +9,7 @@ import { FormDocument } from '../../form/schemas/form.schema';
   toJSON: {
     virtuals: true,
     versionKey: false,
-    transform: function (doc, ret) {
+    transform: function (_doc, ret) {
       ret.id = ret._id;
       delete ret._id;
     },

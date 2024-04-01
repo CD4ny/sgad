@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 // @ts-ignore
-import { DeleteResult, Model, Types } from 'mongoose';
+import { DeleteResult, Model, Query, Types } from 'mongoose';
 import { Form, FormDocument } from './schemas/form.schema';
 import { Field, FieldDocument } from './schemas/field.schema';
 import { CreateFormDto, UpdateFormDto } from './dto/form.dto';
@@ -81,6 +81,7 @@ export class FormService {
 
         createFormDto.title = form.title;
         createFormDto.desc = form.desc;
+        createFormDto.createdAt = form.createdAt;
         createFormDto['id'] = form.id;
 
         if (extended)
@@ -103,6 +104,7 @@ export class FormService {
 
     createFormDto.title = form.title;
     createFormDto.desc = form.desc;
+    createFormDto.createdAt = form.createdAt;
     createFormDto['id'] = form.id;
 
     createFormDto.fields = await Promise.all(
@@ -115,6 +117,13 @@ export class FormService {
   async update(id: string, updateFormDto: UpdateFormDto): Promise<Form> {
     for (const field of updateFormDto.fields) {
     }
+
+    updateFormDto.createdAt = new Date();
+
+    updateFormDto.fields = updateFormDto.fields.map((field): Types.ObjectId => {
+      this.fieldModel.updateOne(field.id, field);
+      return new Types.ObjectId(field.id);
+    });
 
     return this.formModel
       .findByIdAndUpdate(id, updateFormDto, { new: true })

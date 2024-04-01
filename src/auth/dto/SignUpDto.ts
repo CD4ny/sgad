@@ -1,9 +1,12 @@
-import { ApiExtraModels, ApiHideProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsString } from 'class-validator';
 
-@ApiExtraModels()
 export class SignUpDto {
-  @ApiHideProperty()
+  @ApiProperty({ example: 'chavianodaniel99@gmail.com' })
+  @IsString()
   readonly email: string;
-  @ApiHideProperty()
+
+  @ApiProperty({ example: 'string' })
+  @IsString()
   readonly password: string;
 }
