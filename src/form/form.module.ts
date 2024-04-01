@@ -8,7 +8,7 @@ import { Form, FormSchema } from './schemas/form.schema';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Field.name, schema: FieldSchema }]),
-    MongooseModule.forFeature([{ name: Form.name, schema: FormSchema }]), // Registra el esquema de usuario
+    MongooseModule.forFeature([{ name: Form.name, schema: FormSchema }]),
   ],
   controllers: [FormController],
   providers: [FormService],

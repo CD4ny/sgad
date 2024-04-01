@@ -3,7 +3,17 @@ import { Document, HydratedDocument, Types } from 'mongoose';
 import { IsDate, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-@Schema({ validateBeforeSave: true })
+@Schema({
+  validateBeforeSave: true,
+  toJSON: {
+    virtuals: true,
+    versionKey: false,
+    transform: function (doc, ret) {
+      ret.id = ret._id;
+      delete ret._id;
+    },
+  },
+})
 export class Form {
   @ApiProperty()
   @IsString()

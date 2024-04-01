@@ -3,7 +3,17 @@ import { Document, HydratedDocument } from 'mongoose';
 import { IsBoolean, IsEmail, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-@Schema({ validateBeforeSave: true })
+@Schema({
+  validateBeforeSave: true,
+  toJSON: {
+    virtuals: true,
+    versionKey: false,
+    transform: function (doc, ret) {
+      ret.id = ret._id;
+      delete ret._id;
+    },
+  },
+})
 export class User {
   @ApiProperty({ description: 'The name of the user' })
   @IsEmail()

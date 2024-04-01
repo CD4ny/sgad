@@ -4,7 +4,17 @@ import { IsDate, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { FormDocument } from '../../form/schemas/form.schema';
 
-@Schema({ validateBeforeSave: true })
+@Schema({
+  validateBeforeSave: true,
+  toJSON: {
+    virtuals: true,
+    versionKey: false,
+    transform: function (doc, ret) {
+      ret.id = ret._id;
+      delete ret._id;
+    },
+  },
+})
 export class Athlete {
   @ApiProperty()
   @IsString()
